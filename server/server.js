@@ -29,9 +29,16 @@ app.use('/api/events', registrationRoutes);
 
 app.use('/api/dashboard', dashboardRoutes);
 
-const PORT = process.env.PORT || 5001;
+const parsedPort = Number.parseInt(process.env.PORT || '', 10);
+const PORT = Number.isInteger(parsedPort) && parsedPort > 0 ? parsedPort : 5001;
+const HOST = process.env.HOST || '0.0.0.0';
 
-httpServer.listen(PORT, () => {
-    console.log(`listening on port:${PORT}`);
+if (process.env.PORT && PORT !== parsedPort) {
+    console.warn(
+        `Invalid PORT value "${process.env.PORT}". Falling back to ${PORT}.`
+    );
+}
 
+httpServer.listen(PORT, HOST, () => {
+    console.log(`listening on http://${HOST}:${PORT}`);
 });

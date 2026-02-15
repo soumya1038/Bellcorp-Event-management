@@ -132,7 +132,14 @@ cd "Bellcorp Event Management"
 
 ### 2) Configure environment variables
 
-Create `server/.env`:
+Copy examples and fill values:
+
+```bash
+cp server/.env.example server/.env
+cp client/.env.example client/.env
+```
+
+Set `server/.env`:
 
 ```env
 PORT=5055
@@ -140,7 +147,7 @@ MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 ```
 
-Create `client/.env`:
+Set `client/.env`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:5055/api
@@ -194,9 +201,44 @@ npm run build
 
 ## Deployment Notes
 
-- Frontend can be deployed on Vercel or Netlify.
-- Backend can be deployed on Render or Railway.
-- Update `VITE_API_BASE_URL` in frontend deployment settings to your live backend URL.
+### Render (Backend)
+
+1. Create a new **Web Service** in Render from this repository.
+2. Configure:
+   - Root directory: `server`
+   - Build command: `npm install`
+   - Start command: `npm start`
+3. Add environment variables:
+   - `MONGO_URI`
+   - `JWT_SECRET`
+   - `PORT` (optional, Render sets it automatically)
+4. Deploy and copy your backend URL:
+   - Example: `https://bellcorp-api.onrender.com`
+
+### Netlify (Frontend)
+
+1. Create a new site from this repository.
+2. Configure:
+   - Base directory: `client`
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+3. Add frontend environment variable:
+   - `VITE_API_BASE_URL=https://<your-render-backend>.onrender.com/api`
+4. Deploy.
+
+Note: This repo includes `client/public/_redirects` for SPA route fallback on Netlify.
+
+## Version Control Workflow
+
+Recommended flow for clean collaboration:
+
+1. Create a feature branch:
+   - `git checkout -b feat/your-feature-name`
+2. Make and verify changes locally.
+3. Commit with a clear message:
+   - `git commit -m "feat: short summary"`
+4. Push and open a PR:
+   - `git push -u origin feat/your-feature-name`
 
 ## Security Notes
 
